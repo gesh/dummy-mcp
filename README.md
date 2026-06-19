@@ -8,9 +8,16 @@ A toy MCP server with two mocked PostHog-style tools (`get_trends`, `get_funnel`
 npm install
 ```
 
-Open `index.js` and replace the placeholder `apiKey: "phc_....."` inside `track(server, { ... })` with a real **project API key** (the `phc_…` value from PostHog → Project Settings → Project API Key). Personal API keys (`phx_…`) will be rejected with `401 personal_api_key`.
+Config lives in `.env`. Copy the template and fill in your key:
 
-Adjust `host` in the same block if you're not pointing at a local PostHog (`http://localhost:8010` is the default). Use `https://us.i.posthog.com` or `https://eu.i.posthog.com` for cloud.
+```bash
+cp .env.example .env
+```
+
+Then set in `.env`:
+
+- `POSTHOG_API_KEY` — your **project API key** (the `phc_…` value from PostHog → Project Settings → Project API Key). Personal API keys (`phx_…`) are rejected with `401 personal_api_key`.
+- `POSTHOG_HOST` — optional. Defaults to the local dev stack (`http://localhost:8010`); uncomment it and use `https://us.i.posthog.com` (or `https://eu.i.posthog.com`) for cloud.
 
 ## Run
 
@@ -26,7 +33,7 @@ server.ready http://localhost:3000/mcp
 
 Override the port with `PORT=4000 node index.js` if needed.
 
-All tool-call logs (`get_trends called …`, etc.) go to stderr in this terminal. Leave it running.
+All tool-call logs (`get_trends …`, etc.) go to stderr in this terminal. Leave it running.
 
 ## Connect from Claude Desktop
 
@@ -49,5 +56,5 @@ Then restart Claude Desktop. Ask it to invoke `get_trends` or `get_funnel` and w
 
 ## Tools
 
-- `get_trends(event, days=7, interval="day")` — mocked daily time series
+- `get_trends(event, days=7)` — mocked daily time series
 - `get_funnel(steps[], days=7)` — mocked funnel breakdown with conversion rates
